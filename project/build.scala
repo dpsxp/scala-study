@@ -30,8 +30,9 @@ object MyScalatraWebAppBuild extends Build {
         "org.eclipse.jetty" % "jetty-webapp" % "9.2.10.v20150310" % "container",
         "javax.servlet" % "javax.servlet-api" % "3.1.0" % "provided",
         "org.scalatra" %% "scalatra-json" % "2.4.0.RC1",
-        "org.json4s"   %% "json4s-jackson" % "3.3.0.RC1"
-
+        "org.json4s"   %% "json4s-jackson" % "3.3.0.RC1",
+        "org.mongodb" %% "casbah" % "2.7.2",
+        "org.json4s" %% "json4s-mongo" % "3.2.10"
       ),
       scalateTemplateConfig in Compile <<= (sourceDirectory in Compile){ base =>
         Seq(

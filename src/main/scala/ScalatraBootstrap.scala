@@ -5,7 +5,7 @@ import javax.servlet.ServletContext
 
 class ScalatraBootstrap extends LifeCycle {
   override def init(context: ServletContext) {
-    val collection = new ProductTable()
+    val collection = new ProductTable(collectionName = "pismo")
     context.mount(new RootController, "/*")
     context.mount(new ProductsController(collection), "/products")
   }

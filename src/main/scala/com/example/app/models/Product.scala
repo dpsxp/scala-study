@@ -9,7 +9,7 @@ import com.mongodb.casbah.commons.MongoDBObject
 import org.bson.types.ObjectId
 
 case class Product(name: String, price: Int = 30) {
-  protected var id = ""
+  var id = ""
 
   def this(name: String, price: Int, id: String) {
     this(name, price)
@@ -34,6 +34,10 @@ case class Product(name: String, price: Int = 30) {
     }
   }
 
+  def delete {
+    Product.delete(this.id)
+  }
+
   private def valid: Boolean = {
     !this.name.isEmpty
   }
@@ -42,6 +46,11 @@ case class Product(name: String, price: Int = 30) {
 object Product {
   private val db = MongoClient("localhost")
   private val collection = db("pismo")("products")
+
+  def delete(id: String): WriteResult = {
+    val query = MongoDBObject("_id" -> new ObjectId(id))
+    collection.remove(query)
+  }
 
   def fromRequest(data: Params): Product = {
     val name = data.get("product[name]") match {
@@ -60,8 +69,16 @@ object Product {
   }
 
   def find(implicit id: String): Option[Product] = {
-    val query = MongoDBObject("_id" -> new ObjectId(id))
-    this.collection.findOne(query).map(toProduct)
+    try {
+      val query = MongoDBObject("_id" -> new ObjectId(id))
+      this.collection.findOne(query).map(toProduct)
+    } catch {
+      case e: IllegalArgumentException => {
+        // TODO perform some log here
+        None
+      }
+      case _: Throwable => None
+    }
   }
 
   def all(limit: Int = 10): List[Product] = {

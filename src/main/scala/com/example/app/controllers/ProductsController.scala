@@ -20,7 +20,11 @@ class ProductsController extends ScalatraServlet with JacksonJsonSupport {
   get("/:id") {
     implicit val id = params("id")
 
-    Product.find getOrElse halt(404, body = Map("error" -> "Can't find product with ".concat(id)))
+    Product.find getOrElse notFound
+  }
+
+  def notFound(implicit id: String) {
+    halt(404, body = Map("error" -> "Can't find product with id ".concat(id)))
   }
 
   post("/") {
@@ -30,5 +34,20 @@ class ProductsController extends ScalatraServlet with JacksonJsonSupport {
       case true => halt(201, body = Map("success" -> "Product created with success"))
       case _ => halt(422, body = Map("error" -> "Invalid data"))
     }
+  }
+
+  delete("/:id") {
+    implicit val id = params("id")
+
+    Product.find match {
+      case Some(product) => destroy(product)
+      case _ => notFound
+    }
+  }
+
+  private def destroy(product: Product) {
+    product.delete
+    val message = "Product with id " + product.id + " removed"
+    halt(200, body = Map("success" -> message))
   }
 }

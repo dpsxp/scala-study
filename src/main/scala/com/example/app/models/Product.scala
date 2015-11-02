@@ -5,7 +5,7 @@ import com.example.app.tables.ProductTable
 
 case class Product(var name: String = "", var price: Int = 30) {
   var id = ""
-  private val table = new ProductTable
+  private val table = new ProductTable(collectionName = "pismo")
 
   def this(name: String, price: Int, id: String) {
     this(name, price)

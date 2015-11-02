@@ -7,7 +7,7 @@ import com.mongodb.casbah.MongoClient
 import com.mongodb.casbah.commons.MongoDBObject
 import org.bson.types.ObjectId
 
-class ProductTable(host: String = "localhost", collectionName: String = "") {
+class ProductTable(host: String = "localhost", collectionName: String = "test") {
   private lazy val db = MongoClient("localhost")
   private lazy val collection = db(collectionName)("products")
 

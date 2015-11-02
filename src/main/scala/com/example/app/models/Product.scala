@@ -55,8 +55,8 @@ case class Product(var name: String, var price: Int = 30) {
 }
 
 object Product {
-  private val db = MongoClient("localhost")
-  private val collection = db("pismo")("products")
+  private lazy val db = MongoClient("localhost")
+  private lazy val collection = db("pismo")("products")
 
   def delete(id: String): WriteResult = {
     val query = MongoDBObject("_id" -> new ObjectId(id))

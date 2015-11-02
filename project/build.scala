@@ -1,7 +1,6 @@
 import sbt._
 import Keys._
 import org.scalatra.sbt._
-import org.scalatra.sbt.PluginKeys._
 import com.mojolly.scalate.ScalatePlugin._
 import ScalateKeys._
 
@@ -10,7 +9,7 @@ object MyScalatraWebAppBuild extends Build {
   val Name = "My Scalatra Web App"
   val Version = "0.1.0-SNAPSHOT"
   val ScalaVersion = "2.11.6"
-  val ScalatraVersion = "2.4.0.RC3"
+  val ScalatraVersion = "2.3.0"
 
   lazy val project = Project (
     "my-scalatra-web-app",
@@ -25,10 +24,15 @@ object MyScalatraWebAppBuild extends Build {
       libraryDependencies ++= Seq(
         "org.scalatra" %% "scalatra" % ScalatraVersion,
         "org.scalatra" %% "scalatra-scalate" % ScalatraVersion,
-        "org.scalatra" %% "scalatra-specs2" % ScalatraVersion % "test",
+        "org.scalatra" %% "scalatra-scalatest" % ScalatraVersion % "test",
+        "org.scalamock" %% "scalamock-scalatest-support" % "3.2" % "test",
         "ch.qos.logback" % "logback-classic" % "1.1.2" % "runtime",
         "org.eclipse.jetty" % "jetty-webapp" % "9.2.10.v20150310" % "container",
-        "javax.servlet" % "javax.servlet-api" % "3.1.0" % "provided"
+        "javax.servlet" % "javax.servlet-api" % "3.1.0" % "provided",
+        "org.scalatra" %% "scalatra-json" % "2.4.0.RC1",
+        "org.json4s"   %% "json4s-jackson" % "3.3.0.RC1",
+        "org.mongodb" %% "casbah" % "2.7.2",
+        "org.json4s" %% "json4s-mongo" % "3.2.10"
       ),
       scalateTemplateConfig in Compile <<= (sourceDirectory in Compile){ base =>
         Seq(

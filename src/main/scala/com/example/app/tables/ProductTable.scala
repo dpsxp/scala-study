@@ -1,4 +1,4 @@
-package com.example.app.dbs
+package com.example.app.tables
 
 import com.example.app.models.Product
 import org.scalatra.Params

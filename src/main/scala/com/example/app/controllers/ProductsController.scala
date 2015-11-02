@@ -1,6 +1,6 @@
 package com.example.app.controllers
 
-import com.example.app.dbs.ProductTable
+import com.example.app.tables.ProductTable
 import com.example.app.models.Product
 import org.scalatra._
 import org.json4s.DefaultFormats

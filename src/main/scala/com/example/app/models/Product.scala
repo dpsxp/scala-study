@@ -1,7 +1,7 @@
 package com.example.app.models
 
 import com.mongodb.casbah.commons.MongoDBObject
-import com.example.app.dbs.ProductTable
+import com.example.app.tables.ProductTable
 
 case class Product(var name: String = "", var price: Int = 30) {
   var id = ""

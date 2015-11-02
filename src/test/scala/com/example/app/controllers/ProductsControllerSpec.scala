@@ -1,6 +1,6 @@
 import com.example.app.controllers.ProductsController
 import com.example.app.models.Product
-import com.example.app.dbs.ProductTable
+import com.example.app.tables.ProductTable
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.{BeforeAndAfter, FunSpecLike}
 import org.scalatra.test.scalatest._

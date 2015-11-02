@@ -19,7 +19,6 @@ class ProductsController extends ScalatraServlet with JacksonJsonSupport {
 
   get("/:id") {
     implicit val id = params("id")
-
     Product.find getOrElse notFound
   }
 
@@ -42,6 +41,24 @@ class ProductsController extends ScalatraServlet with JacksonJsonSupport {
     Product.find match {
       case Some(product) => destroy(product)
       case _ => notFound
+    }
+  }
+
+  put("/:id") {
+    implicit val id = params("id")
+
+    Product.find match {
+      case Some(product) => update(product)
+      case _ => notFound
+    }
+  }
+
+  private def update(product: Product) {
+    if (product.update(params)) {
+      val message = "Product with id " + product.id + " updated"
+      halt(200, body = Map("success" -> message, "product" -> product))
+    } else {
+      halt(422, body = Map("error" -> "Invalid data"))
     }
   }
 

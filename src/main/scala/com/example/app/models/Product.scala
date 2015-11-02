@@ -8,7 +8,7 @@ import com.mongodb.casbah.MongoClient
 import com.mongodb.casbah.commons.MongoDBObject
 import org.bson.types.ObjectId
 
-case class Product(name: String, price: Int = 30) {
+case class Product(var name: String, var price: Int = 30) {
   var id = ""
 
   def this(name: String, price: Int, id: String) {
@@ -28,10 +28,21 @@ case class Product(name: String, price: Int = 30) {
   }
 
   def toMongo = {
-    id match {
-      case "" => MongoDBObject("name" -> name, "price" -> price)
-      case _ => MongoDBObject("name" -> name, "price" -> price, "_id" -> id)
+    MongoDBObject("name" -> name, "price" -> price)
+  }
+
+  def update(data: Map[String, String]): Boolean = {
+    (data.get("product[name]"), data.get("product[price]")) match {
+      case (None, None) => return false
+      case (Some(name), Some(price)) => {
+        this.name = name
+        this.price = price.toInt
+      }
+      case (_, Some(price)) => this.price = price.toInt
+      case (Some(name), _) => this.name = name
     }
+
+    Product.update(this).getN == 1
   }
 
   def delete {
@@ -79,6 +90,12 @@ object Product {
       }
       case _: Throwable => None
     }
+  }
+
+  def update(product: Product): WriteResult = {
+    val query = MongoDBObject("_id" -> new ObjectId(product.id))
+    val update = product.toMongo
+    this.collection.update(query, update, false)
   }
 
   def all(limit: Int = 10): List[Product] = {

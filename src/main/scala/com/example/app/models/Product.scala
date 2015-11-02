@@ -26,18 +26,18 @@ case class Product(var name: String = "", var price: Int = 30) {
   def update(data: Map[String, String]): Boolean = {
     (data.get("product[name]"), data.get("product[price]")) match {
       case (None, None) => return false
-      case (Some(name), Some(price)) => {
-        this.name = name
-        this.price = price.toInt
+      case (Some(_name), Some(_price)) => {
+        this.name = _name
+        this.price = _price.toInt
       }
-      case (_, Some(price)) => this.price = price.toInt
-      case (Some(name), _) => this.name = name
+      case (_, Some(_price)) => this.price = _price.toInt
+      case (Some(_name), _) => this.name = _name
     }
 
     table.update(this).getN == 1
   }
 
-  def delete {
+  def delete() {
     table.delete(this.id)
   }
 

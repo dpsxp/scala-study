@@ -54,12 +54,12 @@ object Product {
 
   def fromRequest(data: Params): Product = {
     val name = data.get("product[name]") match {
-      case x: Some[String] => x.head
+      case Some(name) => name
       case _ => ""
     }
 
     data.get("product[price]") match {
-      case x: Some[String] => Product(name, x.head.toInt)
+      case Some(price) => Product(name, price.toInt)
       case _ => Product(name)
     }
   }

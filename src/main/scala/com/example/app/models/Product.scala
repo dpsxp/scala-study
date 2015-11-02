@@ -23,10 +23,6 @@ case class Product(var name: String = "", var price: Int = 30) {
     }
   }
 
-  def toMongo = {
-    MongoDBObject("name" -> name, "price" -> price)
-  }
-
   def update(data: Map[String, String]): Boolean = {
     (data.get("product[name]"), data.get("product[price]")) match {
       case (None, None) => return false
@@ -45,8 +41,12 @@ case class Product(var name: String = "", var price: Int = 30) {
     table.delete(this.id)
   }
 
-  private def valid: Boolean = {
+  def valid: Boolean = {
     !this.name.isEmpty
+  }
+
+  def toMongo = {
+    MongoDBObject("name" -> name, "price" -> price)
   }
 }
 

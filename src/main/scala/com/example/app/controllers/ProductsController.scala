@@ -6,8 +6,7 @@ import org.scalatra._
 import org.json4s.DefaultFormats
 import org.scalatra.json._
 
-class ProductsController(mongo: MongoDB) extends ScalatraServlet with JacksonJsonSupport {
-  protected val collection = mongo("products")
+class ProductsController extends ScalatraServlet with JacksonJsonSupport {
   protected implicit lazy val jsonFormats = DefaultFormats
 
   before() {
@@ -15,12 +14,12 @@ class ProductsController(mongo: MongoDB) extends ScalatraServlet with JacksonJso
   }
 
   get("/") {
-    Product.all(collection)
+    Product.all()
   }
 
   get("/:id") {
-    val id = params("id")
+    implicit val id = params("id")
 
-    Product.find(collection, id) getOrElse halt(404, body = Map("error" -> "Can't find product with ".concat(id.toString)))
+    Product.find getOrElse halt(404, body = Map("error" -> "Can't find product with ".concat(id)))
   }
 }

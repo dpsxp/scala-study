@@ -1,12 +1,12 @@
 package com.example.app.controllers
 
-import com.example.app.tables.ProductTable
 import com.example.app.models.Product
+import com.example.app.tables.DBTable
 import org.scalatra._
 import org.json4s.DefaultFormats
 import org.scalatra.json._
 
-class ProductsController(collection: ProductTable) extends ScalatraServlet with JacksonJsonSupport {
+class ProductsController(collection: DBTable[Product]) extends ScalatraServlet with JacksonJsonSupport {
   protected implicit lazy val jsonFormats = DefaultFormats
 
   before() {
@@ -63,7 +63,7 @@ class ProductsController(collection: ProductTable) extends ScalatraServlet with 
   }
 
   private def destroy(product: Product) {
-    product.delete
+    product.delete()
     val message = "Product with id " + product.id + " removed"
     halt(200, body = Map("success" -> message))
   }

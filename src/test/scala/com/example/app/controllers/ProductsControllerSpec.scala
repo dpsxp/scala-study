@@ -1,12 +1,14 @@
 import com.example.app.controllers.ProductsController
 import com.example.app.models.Product
-import com.example.app.tables.ProductTable
+import com.example.app.tables.DBTable
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.{BeforeAndAfter, FunSpecLike}
 import org.scalatra.test.scalatest._
 
+class FakeTable extends DBTable[Product](databaseName = "pismo_test", collectionName = "products")
+
 class ProductsControllerSpec extends ScalatraSuite with FunSpecLike with MockFactory with BeforeAndAfter {
-  val tableMock = mock[ProductTable]
+  val tableMock = mock[FakeTable]
   addServlet(new ProductsController(tableMock), "/products")
 
   describe("GET /products on ProductsController") {

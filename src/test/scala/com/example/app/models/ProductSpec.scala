@@ -28,7 +28,7 @@ class ProductSpec extends ScalatraSuite with FunSpecLike {
   describe("#toMongo") {
     it("returns a MongoDBObject with the name and price values") {
       val product = new Product("test", 50)
-      val result = product.toMongo
+      val result = Product.toMongo(product)
 
       result.get("name") should equal("test")
       result.get("price") should equal(50)

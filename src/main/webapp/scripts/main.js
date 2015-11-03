@@ -1,11 +1,10 @@
 var mod = angular.module('app', ["ngResource"]);
 
-var createProduct = function() {
-  return {
-    name: "",
-    price: ""
+mod.filter("toMoney", function() {
+  return function(input) {
+    return "R$" + input.toFixed(2);
   };
-};
+});
 
 mod.factory("ProductsResource", ["$resource", function($resource) {
   return $resource("/products/:id", { id: '@id' }, {
@@ -16,6 +15,14 @@ mod.factory("ProductsResource", ["$resource", function($resource) {
 }]);
 
 mod.controller('Products', ["$scope", "$http", "$httpParamSerializer", "ProductsResource", function($scope, $http, $httpParamSerializer, ProductsResource) {
+  var createProduct = function() {
+    return {
+      name: "",
+      price: ""
+    };
+  };
+
+
   $scope.resetProduct = function() {
     $scope.product = createProduct();
   };
@@ -52,9 +59,9 @@ mod.controller('Products', ["$scope", "$http", "$httpParamSerializer", "Products
       .then(function(response) {
         $scope.products.unshift(response.product);
       })
-      .then(function() {
-        $scope.resetProduct();
-      });
+    .then(function() {
+      $scope.resetProduct();
+    });
   };
 
   $scope.remove = function(id) {

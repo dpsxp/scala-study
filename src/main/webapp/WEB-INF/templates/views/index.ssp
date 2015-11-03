@@ -40,7 +40,7 @@
 
                             <ul ng-repeat="product in products">
                                 <li>
-                                    {{ product.name }} - {{ product.price }}
+                                    {{ product.name }} - {{ product.price | toMoney }}
                                     <button class="mdl-button mdl-js=button mdl-button--fab mdl-button--mini-fab" ng-click="edit(product)">
                                         <i class="material-icons">edit</i>
                                     </button>

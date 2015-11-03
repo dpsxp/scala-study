@@ -4,8 +4,10 @@ import org.scalatra._
 import org.scalatra.scalate.ScalateSupport
 
 class RootController extends ScalatraServlet with ScalateSupport {
-  get("/*") {
+  get("/") {
     contentType = "text/html"
-    jade("/WEB-INF/templates/views/index.jade")
+
+    ssp("/WEB-INF/templates/views/index.ssp")
   }
+
 }

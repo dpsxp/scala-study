@@ -16,8 +16,9 @@ abstract class DBTable[T <: MongoDocument](host: String = "localhost", databaseN
     collection.remove(query)
   }
 
-  def save(item: T): WriteResult = {
+  def save(item: T): T = {
     this.collection.insert(toMongo(item))
+    toModel(this.collection.last)
   }
 
   def find(id: String): Option[T] = {

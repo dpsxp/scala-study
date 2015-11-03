@@ -34,7 +34,7 @@ class ProductsController(collection: DBTable[Product]) extends ScalatraServlet w
     val product = collection.fromRequest(params)
 
     product.save match {
-      case true => halt(201, body = Map("success" -> "Product created with success"))
+      case true => halt(201, body = Map("success" -> "Product created with success", "product" -> product ))
       case _ => halt(422, body = Map("error" -> "Invalid data"))
     }
   }

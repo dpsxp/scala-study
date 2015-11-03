@@ -13,17 +13,15 @@ case class Product(var name: String = "", var price: Int = 30) extends MongoDocu
 
   def save: Boolean = {
     if (this.valid) {
-      Product.save(this).getN match {
-        case 1 => true
-        case _ => false
-      }
+      this.id = Product.save(this).id
+      true
     } else {
       false
     }
   }
 
   def update(data: Map[String, String]): Boolean = {
-    (data.get("product[name]"), data.get("product[price]")) match {
+    (data.get("name"), data.get("price")) match {
       case (None, None) => return false
       case (Some(_name), Some(_price)) => {
         this.name = _name
@@ -41,7 +39,7 @@ case class Product(var name: String = "", var price: Int = 30) extends MongoDocu
   }
 
   def valid: Boolean = {
-    !this.name.isEmpty
+    !this.name.isEmpty && this.price > 0
   }
 }
 
@@ -59,12 +57,12 @@ object Product extends DBTable[Product](databaseName = "pismo", collectionName =
   }
 
   override def fromRequest(data: Params): Product = {
-    val name = data.get("product[name]") match {
+    val name = data.get("name") match {
       case Some(_name) => _name
       case _ => ""
     }
 
-    data.get("product[price]") match {
+    data.get("price") match {
       case Some(price) => Product(name, price.toInt)
       case _ => Product(name)
     }

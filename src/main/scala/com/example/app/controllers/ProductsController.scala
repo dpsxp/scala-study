@@ -6,11 +6,15 @@ import org.scalatra._
 import org.json4s.DefaultFormats
 import org.scalatra.json._
 
-class ProductsController(collection: DBTable[Product]) extends ScalatraServlet with JacksonJsonSupport {
+class ProductsController(collection: DBTable[Product]) extends ScalatraServlet with JacksonJsonSupport with CorsSupport {
   protected implicit lazy val jsonFormats = DefaultFormats
 
   before() {
     contentType = formats("json")
+  }
+
+  options("/*") {
+    response.setHeader("Access-Control-Allow-Headers", request.getHeader("Access-Control-Request-Headers"));
   }
 
   get("/") {

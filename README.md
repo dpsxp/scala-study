@@ -3,7 +3,7 @@
 ## Build & Run ##
 
 ```sh
-$ cd My_Scalatra_Web_App
+$ cd scala-study
 $ ./sbt
 > container:start
 > browse

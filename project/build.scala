@@ -2,6 +2,7 @@ import sbt._
 import Keys._
 import org.scalatra.sbt._
 import com.mojolly.scalate.ScalatePlugin._
+import com.typesafe.sbt.packager.archetypes.JavaAppPackaging
 import ScalateKeys._
 
 object MyScalatraWebAppBuild extends Build {
@@ -27,7 +28,8 @@ object MyScalatraWebAppBuild extends Build {
         "org.scalatra" %% "scalatra-scalatest" % ScalatraVersion % "test",
         "org.scalamock" %% "scalamock-scalatest-support" % "3.2" % "test",
         "ch.qos.logback" % "logback-classic" % "1.1.2" % "runtime",
-        "org.eclipse.jetty" % "jetty-webapp" % "9.2.10.v20150310" % "container",
+        "org.eclipse.jetty" % "jetty-webapp" % "9.2.10.v20150310" % "compile;container",
+        "org.eclipse.jetty" % "jetty-plus" % "9.2.10.v20150310" % "compile;container",
         "javax.servlet" % "javax.servlet-api" % "3.1.0" % "provided",
         "org.scalatra" %% "scalatra-json" % "2.4.0.RC1",
         "org.json4s"   %% "json4s-jackson" % "3.3.0.RC1",
@@ -47,5 +49,5 @@ object MyScalatraWebAppBuild extends Build {
         )
       }
     )
-  )
+  ).enablePlugins(JavaAppPackaging)
 }

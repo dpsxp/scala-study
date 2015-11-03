@@ -1,12 +1,14 @@
 import com.example.app.controllers.ProductsController
 import com.example.app.models.Product
-import com.example.app.tables.ProductTable
+import com.example.app.tables.DBTable
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.{BeforeAndAfter, FunSpecLike}
 import org.scalatra.test.scalatest._
 
+class FakeTable extends DBTable[Product](databaseName = "pismo_test", collectionName = "products")
+
 class ProductsControllerSpec extends ScalatraSuite with FunSpecLike with MockFactory with BeforeAndAfter {
-  val tableMock = mock[ProductTable]
+  val tableMock = mock[FakeTable]
   addServlet(new ProductsController(tableMock), "/products")
 
   describe("GET /products on ProductsController") {
@@ -168,11 +170,10 @@ class ProductsControllerSpec extends ScalatraSuite with FunSpecLike with MockFac
   describe("POST /products on ProductsController") {
     describe("when the data is valid") {
       val params = Map("product[name]" -> "test", "product[price]" -> "50")
-      val product = mock[Product]
+      val product = new Product("test", 50)
 
       it("returns a 201 status") {
         tableMock.fromRequest _ expects * returning product
-        product.save _ expects() returning true
 
         post("/products") {
           status should equal(201)
@@ -181,7 +182,6 @@ class ProductsControllerSpec extends ScalatraSuite with FunSpecLike with MockFac
 
       it("returns a success message in json format") {
         tableMock.fromRequest _ expects * returning product
-        product.save _ expects() returning true
 
         post("/products", params = params) {
           body should include("\"success\":\"Product created with success\"")

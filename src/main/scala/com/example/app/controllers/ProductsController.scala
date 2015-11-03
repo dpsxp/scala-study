@@ -1,16 +1,20 @@
 package com.example.app.controllers
 
-import com.example.app.tables.ProductTable
 import com.example.app.models.Product
+import com.example.app.tables.DBTable
 import org.scalatra._
 import org.json4s.DefaultFormats
 import org.scalatra.json._
 
-class ProductsController(collection: ProductTable) extends ScalatraServlet with JacksonJsonSupport {
+class ProductsController(collection: DBTable[Product]) extends ScalatraServlet with JacksonJsonSupport with CorsSupport {
   protected implicit lazy val jsonFormats = DefaultFormats
 
   before() {
     contentType = formats("json")
+  }
+
+  options("/*") {
+    response.setHeader("Access-Control-Allow-Headers", request.getHeader("Access-Control-Request-Headers"));
   }
 
   get("/") {
@@ -30,7 +34,7 @@ class ProductsController(collection: ProductTable) extends ScalatraServlet with 
     val product = collection.fromRequest(params)
 
     product.save match {
-      case true => halt(201, body = Map("success" -> "Product created with success"))
+      case true => halt(201, body = Map("success" -> "Product created with success", "product" -> product ))
       case _ => halt(422, body = Map("error" -> "Invalid data"))
     }
   }
@@ -63,7 +67,7 @@ class ProductsController(collection: ProductTable) extends ScalatraServlet with 
   }
 
   private def destroy(product: Product) {
-    product.delete
+    product.delete()
     val message = "Product with id " + product.id + " removed"
     halt(200, body = Map("success" -> message))
   }

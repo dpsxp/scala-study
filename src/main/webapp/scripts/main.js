@@ -2,7 +2,7 @@ var mod = angular.module('app', ["ngResource"]);
 
 mod.filter("toMoney", function() {
   return function(input) {
-    return "R$" + input.toFixed(2);
+    return "R$ " + input.toFixed(2).split('.').join(',');
   };
 });
 
@@ -14,7 +14,7 @@ mod.factory("ProductsResource", ["$resource", function($resource) {
   });
 }]);
 
-mod.controller('Products',
+mod.controller('ProductsController',
   ["$scope", "$httpParamSerializer", "ProductsResource",
   function($scope, $httpParamSerializer, ProductsResource) {
     var createProduct = function() {
@@ -36,7 +36,10 @@ mod.controller('Products',
     };
 
     $scope.submit = function() {
-      event.preventDefault();
+      if (event) {
+        event.preventDefault();
+      }
+
       var product = $scope.product;
 
       if ("id" in product) {

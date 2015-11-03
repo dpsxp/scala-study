@@ -18,7 +18,7 @@
             </header>
             <main class="mdl-layout__content">
                 <div class="page-content" ng-app="app">
-                    <div class="mdl-grid" ng-controller="Products">
+                    <div class="mdl-grid" ng-controller="ProductsController">
                         <div class="mdl-cell mdl-cell--12-col">
                             <form action="#" ng-submit="submit()">
                                 <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">

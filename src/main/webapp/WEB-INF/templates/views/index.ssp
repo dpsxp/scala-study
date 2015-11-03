@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Produtos</title>
+        <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.6/material.indigo-pink.min.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    </head>
+    <body>
+        <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+            <header class="mdl-layout__header">
+                <div class="mdl-layout__header-row">
+                    <span class="mdl-layout-title">Title</span>
+                </div>
+            </header>
+            <main class="mdl-layout__content">
+                <div class="page-content" ng-app="app">
+                    <div class="mdl-grid" ng-controller="Products">
+                        <div class="mdl-cell mdl-cell--12-col">
+                            <form action="#" ng-submit="submit()">
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input ng-model="product.name" class="mdl-textfield__input" name="name" type="text" id="name">
+                                    <label class="mdl-textfield__label" for="name">Nome...</label>
+                                </div>
+
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input ng-model="product.price" class="mdl-textfield__input" name="text" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="price">
+                                    <label class="mdl-textfield__label" for="price">Preço...</label>
+                                    <span class="mdl-textfield__error">Valor não é um número!</span>
+                                </div>
+
+                                <button type="submit" class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab">
+                                    <i class="material-icons">add</i>
+                                </button>
+
+                            </form>
+
+                            <ul ng-repeat="product in products">
+                                <li>
+                                    {{ product.name }} - {{ product.price }}
+                                    <button class="mdl-button mdl-js=button mdl-button--fab mdl-button--mini-fab" ng-click="edit(product)">
+                                        <i class="material-icons">edit</i>
+                                    </button>
+                                    <button class="mdl-button mdl-js=button mdl-button--fab mdl-button--mini-fab" ng-click="remove(product.id)">
+                                        <i class="material-icons">remove</i>
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </main>
+        </div>
+        <script src="https://storage.googleapis.com/code.getmdl.io/1.0.6/material.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>
+        <script src="/scripts/main.js"></script>
+    </body>
+</html>

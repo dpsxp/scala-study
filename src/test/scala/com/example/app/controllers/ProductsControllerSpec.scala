@@ -170,11 +170,10 @@ class ProductsControllerSpec extends ScalatraSuite with FunSpecLike with MockFac
   describe("POST /products on ProductsController") {
     describe("when the data is valid") {
       val params = Map("product[name]" -> "test", "product[price]" -> "50")
-      val product = mock[Product]
+      val product = new Product("test", 50)
 
       it("returns a 201 status") {
         tableMock.fromRequest _ expects * returning product
-        product.save _ expects() returning true
 
         post("/products") {
           status should equal(201)
@@ -183,7 +182,6 @@ class ProductsControllerSpec extends ScalatraSuite with FunSpecLike with MockFac
 
       it("returns a success message in json format") {
         tableMock.fromRequest _ expects * returning product
-        product.save _ expects() returning true
 
         post("/products", params = params) {
           body should include("\"success\":\"Product created with success\"")

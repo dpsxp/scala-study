@@ -1,28 +1,31 @@
-var mod = angular.module('app', [])
+var mod = angular.module('app', ["ngResource"]);
 
 var createProduct = function() {
   return {
     name: "",
     price: ""
-  }
-}
+  };
+};
 
-mod.controller('Products', ["$scope", "$http", "$httpParamSerializer", function($scope, $http, $httpParamSerializer) {
-  $scope.products = [];
+mod.factory("ProductsResource", ["$resource", function($resource) {
+  return $resource("/products/:id", { id: '@id' }, {
+    update: {
+      method: 'PUT'
+    }
+  });
+}]);
 
+mod.controller('Products', ["$scope", "$http", "$httpParamSerializer", "ProductsResource", function($scope, $http, $httpParamSerializer, ProductsResource) {
   $scope.resetProduct = function() {
     $scope.product = createProduct();
-  }
+  };
 
   $scope.resetProduct();
-
-  $http.get('/products').then(function(response) {
-    $scope.products = response.data;
-  });
+  $scope.products = ProductsResource.query();
 
   $scope.edit = function(product) {
     $scope.product = product;
-  }
+  };
 
   $scope.submit = function() {
     event.preventDefault();
@@ -33,47 +36,39 @@ mod.controller('Products', ["$scope", "$http", "$httpParamSerializer", function(
     } else {
       $scope.save(product);
     }
-  }
+  };
 
   $scope.update = function(product) {
-    var req = {
-      method: "PUT",
-      url: "/products/" + product.id,
-      data: $httpParamSerializer(product)
-    };
-
-    $http(req)
-      .then(function(response) {
-        $scope.resetProduct()
+    ProductsResource.update({ id: product.id }, $httpParamSerializer(product))
+      .$promise
+      .then(function() {
+        $scope.resetProduct();
       });
-  }
+  };
 
   $scope.save = function(product) {
-    var req = {
-      method: "POST",
-      url: "/products",
-      data: $httpParamSerializer(product)
-    };
-
-    $http(req)
+    ProductsResource.save($httpParamSerializer(product))
+      .$promise
       .then(function(response) {
-        $scope.products.push(response.data.product);
+        $scope.products.unshift(response.product);
       })
       .then(function() {
-        $scope.resetProduct()
+        $scope.resetProduct();
       });
   };
 
   $scope.remove = function(id) {
-    $http.delete("/products/" + id).then(function(response) {
-      $scope.products = $scope.products.filter(function(prod) {
-        return prod.id !== id;
+    ProductsResource.delete({ id: id })
+      .$promise
+      .then(function() {
+        $scope.products = $scope.products.filter(function(prod) {
+          return prod.id !== id;
+        });
       });
-    });
   };
 }]);
 
 mod.run(["$http", function($http) {
   $http.defaults.headers.post["Content-Type"] = 'application/x-www-form-urlencoded';
   $http.defaults.headers.put["Content-Type"] = 'application/x-www-form-urlencoded';
-}])
+}]);

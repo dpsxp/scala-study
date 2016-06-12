@@ -36,10 +36,6 @@ mod.controller('ProductsController',
     };
 
     $scope.submit = function() {
-      if (event) {
-        event.preventDefault();
-      }
-
       var product = $scope.product;
 
       if ("id" in product) {
